@@ -43,12 +43,6 @@ export default function LoginPage() {
             {submitting ? "Signing in..." : "Sign in"}
           </button>
         </form>
-        <p className="mt-6 text-sm text-[rgb(var(--muted))]">
-          New here?{" "}
-          <Link to="/register" className="font-semibold text-brand">
-            Create an account
-          </Link>
-        </p>
       </div>
     </div>
   );
