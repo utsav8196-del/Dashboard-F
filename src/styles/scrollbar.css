@@ -1,0 +1,219 @@
+/* ✨ Global Custom Scrollbar Styling */
+/* Apply to entire website for consistent look */
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #667eea #f0f0f0;
+}
+
+/* Chrome, Edge, Safari Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+}
+
+/* Dark Mode Scrollbar */
+@media (prefers-color-scheme: dark) {
+    * {
+        scrollbar-color: #667eea #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: 2px solid #1a1a1a;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 0 12px rgba(102, 126, 234, 0.7);
+    }
+}
+
+/* ✨ Hidden But Functional Scrollbar (Alternative) */
+.scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+/* ✨ Always Visible Scrollbar */
+.scrollbar-always-visible {
+    overflow-y: scroll;
+}
+
+/* ✨ Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ✨ Admin Dashboard Scrollbar (Darker theme) */
+.admin-container {
+    scrollbar-color: #667eea #2d2d2d;
+}
+
+.admin-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-container::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.admin-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+.admin-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ✨ Store Page Scrollbar (Light theme) */
+.store-container {
+    scrollbar-color: #667eea #f9f9f9;
+}
+
+.store-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.store-container::-webkit-scrollbar-track {
+    background: #f9f9f9;
+}
+
+.store-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 5px;
+}
+
+.store-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.4);
+}
+
+/* ✨ Modal Scrollbar */
+.modal-content {
+    scrollbar-color: #667eea #ffffff;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ✨ Landing Page Hero Scrollbar */
+.hero-section {
+    scrollbar-color: #667eea transparent;
+}
+
+.hero-section::-webkit-scrollbar {
+    width: 12px;
+}
+
+.hero-section::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hero-section::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 6px;
+}
+
+.hero-section::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+}
+
+/* ✨ Scrollbar Animation */
+@keyframes scrollbarPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+::-webkit-scrollbar-thumb {
+    animation: scrollbarPulse 3s ease-in-out infinite;
+}
+
+/* ✨ Very Thin Scrollbar (Minimal Design) */
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 3px;
+}
+
+/* ✨ Thick Scrollbar (Premium Feel) */
+.scrollbar-thick {
+    scrollbar-width: auto;
+}
+
+.scrollbar-thick::-webkit-scrollbar {
+    width: 14px;
+}
+
+.scrollbar-thick::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, #f0f0f0, #e8e8e8);
+    border-radius: 10px;
+}
+
+.scrollbar-thick::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.scrollbar-thick::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2), 0 0 12px rgba(102, 126, 234, 0.5);
+}

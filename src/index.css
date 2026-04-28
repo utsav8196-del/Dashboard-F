@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --surface: 247 247 243;
+  --surface-alt: 255 255 255;
+  --card: 255 255 255;
+  --line: 226 232 240;
+  --text: 15 23 42;
+  --muted: 100 116 139;
+  --hero-a: 224 242 254;
+  --hero-b: 255 237 213;
+}
+
+.dark {
+  color-scheme: dark;
+  --surface: 9 14 28;
+  --surface-alt: 15 23 42;
+  --card: 15 23 42;
+  --line: 51 65 85;
+  --text: 241 245 249;
+  --muted: 148 163 184;
+  --hero-a: 15 118 110;
+  --hero-b: 30 41 59;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply m-0 min-h-screen bg-[rgb(var(--surface))] font-body text-[rgb(var(--text))] antialiased;
+  background-image:
+    radial-gradient(circle at top left, rgba(var(--hero-a), 0.28), transparent 32%),
+    radial-gradient(circle at top right, rgba(var(--hero-b), 0.24), transparent 28%),
+    linear-gradient(180deg, rgba(var(--surface-alt), 0.9), rgba(var(--surface), 1));
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+* {
+  @apply border-[rgb(var(--line))];
+}
+
+.panel {
+  @apply rounded-3xl border bg-[rgb(var(--card))] shadow-panel;
+}
+
+.panel-muted {
+  @apply rounded-3xl border shadow-panel backdrop-blur;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold text-[rgb(var(--text))] transition hover:-translate-y-0.5 hover:border-brand hover:text-brand;
+}
+
+.input {
+  @apply w-full rounded-2xl border bg-transparent px-4 py-3 text-sm outline-none transition placeholder:text-[rgb(var(--muted))] focus:border-brand;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+}
+
+.status-pending {
+  @apply bg-amber-100 text-amber-700;
+}
+
+.status-shipped {
+  @apply bg-sky-100 text-sky-700;
+}
+
+.status-delivered {
+  @apply bg-emerald-100 text-emerald-700;
+}
+
+.grid-shell {
+  @apply mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8;
+}
+
+.dark .panel-muted {
+  background-color: rgba(15, 23, 42, 0.72);
+}
+
+.dark .status-pending {
+  @apply bg-amber-500/20 text-amber-200;
+}
+
+.dark .status-shipped {
+  @apply bg-sky-500/20 text-sky-200;
+}
+
+.dark .status-delivered {
+  @apply bg-emerald-500/20 text-emerald-200;
+}
