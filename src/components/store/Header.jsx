@@ -136,8 +136,6 @@
 //     </header>
 //   );
 // }
-
-
 import {
   Heart,
   LayoutDashboard,
@@ -147,6 +145,7 @@ import {
   ShoppingCart,
   User,
   X,
+  LogOut,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
@@ -160,13 +159,14 @@ export default function Header() {
   const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // ✅ Proper scroll lock
   useEffect(() => {
     if (mobileOpen) {
-      document.body.classList.add("overflow-hidden");
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.classList.remove("overflow-hidden");
+      document.body.style.overflow = "auto";
     }
-    return () => document.body.classList.remove("overflow-hidden");
+    return () => (document.body.style.overflow = "auto");
   }, [mobileOpen]);
 
   const navLinks = [
@@ -189,114 +189,104 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-[rgba(var(--surface-alt),0.82)] backdrop-blur-xl">
-      <div className="grid-shell flex items-center justify-between gap-2 sm:gap-3 py-3 sm:py-4">
-        {/* Logo */}
-        <Link to="/">
-          <Logo />
-        </Link>
+    <>
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 border-b bg-[rgba(var(--surface-alt),0.9)] backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-3">
+          <Link to="/">
+            <Logo />
+          </Link>
 
-        {/* Tablet + Desktop Nav */}
-        <div className="hidden md:flex items-center gap-2">
-          {navLinks.map(({ to, label, icon: Icon, count }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `btn-secondary flex items-center justify-center md:px-2 lg:px-3 text-sm md:text-xs lg:text-sm ${isActive ? "bg-ink text-white" : ""
-                }`
-              }
-            >
-              <Icon size={16} className="md:mr-0 lg:mr-2" />
-              <span className="hidden lg:inline">
+          {/* Desktop */}
+          <div className="hidden md:flex items-center gap-2">
+            {navLinks.map(({ to, label, icon: Icon, count }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `flex items-center rounded-xl px-3 py-2 text-sm font-medium transition ${isActive
+                    ? "bg-black text-white"
+                    : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                  }`
+                }
+              >
+                <Icon size={16} className="mr-2" />
                 {count !== null ? `${label} (${count})` : label}
-              </span>
-            </NavLink>
-          ))}
+              </NavLink>
+            ))}
 
-          <ThemeToggle />
+            <ThemeToggle />
 
-          {user ? (
-            <button
-              type="button"
-              onClick={logout}
-              className="btn-primary flex items-center md:px-2 lg:px-3"
-            >
-              <User size={16} className="md:mr-0 lg:mr-2" />
-              <span className="hidden lg:inline">
+            {user ? (
+              <button
+                onClick={logout}
+                className="flex items-center px-3 py-2 rounded-xl bg-black text-white"
+              >
+                <LogOut size={16} className="mr-2" />
                 {user.name.split(" ")[0]}
-              </span>
-            </button>
-          ) : (
-            <Link
-              className="btn-primary flex items-center md:px-2 lg:px-3"
-              to="/login"
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center px-3 py-2 rounded-xl bg-black text-white"
+              >
+                <User size={16} className="mr-2" />
+                Sign in
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="h-10 w-10 flex items-center justify-center rounded-xl border"
             >
-              <User size={16} className="md:mr-0 lg:mr-2" />
-              <span className="hidden lg:inline">Sign in</span>
-            </Link>
-          )}
+              <Menu size={18} />
+            </button>
+          </div>
         </div>
+      </header>
 
-        {/* Mobile Controls */}
-        <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border"
-            aria-label="Open menu"
-          >
-            <Menu size={18} />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
+      {/* ✅ MOBILE DRAWER */}
       <div
-        className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${mobileOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-[999] md:hidden ${mobileOpen ? "visible" : "invisible"
           }`}
-        aria-hidden={!mobileOpen}
       >
         {/* Overlay */}
-        <button
-          type="button"
-          aria-label="Close menu"
+        <div
           onClick={() => setMobileOpen(false)}
-          className="absolute inset-0 bg-slate-950/45"
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${mobileOpen ? "opacity-100" : "opacity-0"
+            }`}
         />
 
         {/* Drawer */}
         <div
-          className={`absolute right-0 top-0 h-full w-[80%] max-w-sm p-6 shadow-2xl overflow-y-auto transition-transform duration-300 ease-in-out ${mobileOpen ? "translate-x-0" : "translate-x-full"
+          className={`absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white dark:bg-slate-900 shadow-2xl rounded-l-3xl transform transition-transform duration-300 ease-in-out ${mobileOpen ? "translate-x-0" : "translate-x-full"
             }`}
-          style={{ backgroundColor: "rgb(var(--card))" }}
         >
           {/* Header */}
-          <div className="mb-6 flex items-center justify-between">
-            <p className="font-display text-lg font-bold">Menu</p>
+          <div className="flex items-center justify-between p-4 border-b">
+            <h2 className="text-lg font-bold">Menu</h2>
             <button
-              type="button"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border"
-              aria-label="Close menu"
+              className="h-10 w-10 flex items-center justify-center rounded-xl border"
             >
               <X size={18} />
             </button>
           </div>
 
-          {/* Nav Links */}
-          <nav className="space-y-2">
+          {/* Links */}
+          <nav className="p-4 space-y-2">
             {navLinks.map(({ to, label, icon: Icon, count }) => (
               <NavLink
                 key={to}
                 to={to}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${isActive
-                    ? "bg-ink text-white"
+                  `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition ${isActive
+                    ? "bg-black text-white"
                     : "hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`
                 }
@@ -309,21 +299,20 @@ export default function Header() {
             {/* Auth */}
             {user ? (
               <button
-                type="button"
                 onClick={() => {
                   logout();
                   setMobileOpen(false);
                 }}
-                className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
               >
-                <User size={18} />
-                Sign out
+                <LogOut size={18} />
+                Logout
               </button>
             ) : (
               <NavLink
                 to="/login"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white transition"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-black text-white text-sm font-semibold"
               >
                 <User size={18} />
                 Sign in
@@ -332,6 +321,6 @@ export default function Header() {
           </nav>
         </div>
       </div>
-    </header>
+    </>
   );
 }

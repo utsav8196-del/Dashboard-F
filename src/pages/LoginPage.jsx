@@ -20,8 +20,8 @@ export default function LoginPage() {
 
     try {
       const response = await login(form);
-      const nextPath =
-        location.state?.from?.pathname || (response.user.role === "admin" ? "/admin/overview" : "/");
+      // const nextPath =
+      //   location.state?.from?.pathname || (response.user.role === "admin" ? "/admin/overview" : "/");
       navigate(nextPath, { replace: true });
     } catch (requestError) {
       setError(requestError.response?.data?.message || "Unable to sign in");

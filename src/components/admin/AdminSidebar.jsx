@@ -6,7 +6,7 @@ const links = [
   { to: "/admin/overview", label: "Overview", icon: ChartNoAxesCombined },
   { to: "/admin/products", label: "Products", icon: Boxes },
   { to: "/admin/bills", label: "Bills", icon: FileText },
-  { to: "/admin/orders", label: "Orders", icon: PackageCheck },
+  // { to: "/admin/orders", label: "Orders", icon: PackageCheck },
   { to: "/admin/users", label: "Users", icon: Users },
 ];
 
