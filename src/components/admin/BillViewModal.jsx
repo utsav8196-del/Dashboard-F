@@ -106,7 +106,7 @@ export default function BillViewModal({ open, bill, onClose }) {
                                     <span>Subtotal:</span>
                                     <span className="font-semibold">{formatCurrency(bill.subtotal)}</span>
                                 </div>
-                                {bill.tax > 0 && (
+                                {bill.tax > `` && (
                                     <div className="flex justify-between py-2">
                                         <span>Tax:</span>
                                         <span className="font-semibold">{formatCurrency(bill.tax)}</span>

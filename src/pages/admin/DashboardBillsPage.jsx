@@ -174,7 +174,7 @@ export default function DashboardBillsPage() {
                                                         className="rounded-full border p-3 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20"
                                                         onClick={() => handleDeleteBill(bill._id)}
                                                     >
-                                                        <Trash2 size={16} />
+                                                        <Trash2 size={16} className="hover:text-black" />
                                                     </button>
                                                 </div>
                                             </td>
