@@ -1,5 +1,14 @@
-import { X, Download } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { formatCurrency } from "../../utils/format.js";
+
+const companyInfo = {
+    name: "PulseCart",
+    address: "123 Business Street, New Delhi, India",
+    phone: "+91 98765 43210",
+    email: "billing@pulsecart.com",
+    bank: "Really Great Bank",
+    account: "0123 4567 8901",
+};
 
 export default function BillViewModal({ open, bill, onClose }) {
     if (!open || !bill) return null;
@@ -8,11 +17,17 @@ export default function BillViewModal({ open, bill, onClose }) {
         window.print();
     };
 
+    const invoiceDate = new Date(bill.createdAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 print:bg-transparent">
-            <div className="panel w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-                <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-6 dark:bg-slate-900 print:hidden">
-                    <h2 className="font-display text-2xl font-bold">Bill Details</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 print:block print:bg-transparent print:px-0">
+            <div className="w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[28px] bg-[#f3ecdc] shadow-2xl print:max-h-none print:max-w-none print:overflow-visible print:rounded-none print:shadow-none">
+                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-black/10 bg-white/90 p-6 backdrop-blur print:hidden">
+                    <h2 className="font-display text-2xl font-bold text-black">Bill Details</h2>
                     <div className="flex gap-2">
                         <button
                             type="button"
@@ -25,129 +40,121 @@ export default function BillViewModal({ open, bill, onClose }) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="rounded-full p-2 text-black hover:bg-black/5"
                         >
                             <X size={24} />
                         </button>
                     </div>
                 </div>
 
-                <div className="space-y-6 p-6">
-                    {/* Header */}
-                    <div className="border-b pb-6">
-                        <div className="flex items-start justify-between mb-4">
-                            <div>
-                                <h1 className="font-display text-3xl sm:text-4xl font-bold">BILL</h1>
-                                <p className="text-sm text-[rgb(var(--muted))]">{bill.billNumber}</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm text-[rgb(var(--muted))]">Bill Date</p>
-                                <p className="font-semibold">{new Date(bill.createdAt).toLocaleDateString()}</p>
-                            </div>
-                        </div>
-
-                        <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${bill.paymentStatus === 'paid' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                            bill.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                            }`}>
-                            {bill.paymentStatus.toUpperCase()}
+                <div className="mx-auto min-h-[1123px] w-full max-w-[794px] bg-[#f3ecdc] px-10 py-12 text-black print:min-h-0 print:max-w-none print:px-10 print:py-12">
+                    <div className="flex items-start justify-between gap-6">
+                        <h1 className="text-[74px] font-black leading-none tracking-[-0.05em] sm:text-[96px]">
+                            Invoice
+                        </h1>
+                        <div className="pt-3 text-right">
+                            <p className="text-[14px] leading-6">{invoiceDate}</p>
+                            <p className="text-[14px] font-bold leading-6">Invoice No. {bill.billNumber}</p>
                         </div>
                     </div>
 
-                    {/* Bill From/To */}
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <div>
-                            <p className="text-xs font-semibold text-[rgb(var(--muted))] mb-2">FROM</p>
-                            <div className="space-y-1">
-                                <p className="font-semibold">Your Company</p>
-                                <p className="text-sm">Business Address</p>
-                                <p className="text-sm">City, State ZIP</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p className="text-xs font-semibold text-[rgb(var(--muted))] mb-2">BILL TO</p>
-                            <div className="space-y-1">
-                                <p className="font-semibold">{bill.customerName}</p>
-                                {bill.customerEmail && <p className="text-sm">{bill.customerEmail}</p>}
-                                {bill.customerPhone && <p className="text-sm">{bill.customerPhone}</p>}
-                            </div>
+                    <div className="mt-4 border-t border-black/30 pt-4">
+                        <p className="text-[15px] font-bold">Billed to:</p>
+                        <div className="mt-2 space-y-1 text-[14px] leading-7">
+                            <p>{bill.customerName}</p>
+                            {bill.customerPhone ? <p>{bill.customerPhone}</p> : null}
+                            {bill.customerEmail ? <p>{bill.customerEmail}</p> : null}
                         </div>
                     </div>
 
-                    {/* Items Table */}
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full text-sm">
-                            <thead className="bg-slate-100 dark:bg-slate-800">
-                                <tr>
-                                    <th className="px-4 py-3 text-left font-semibold">Description</th>
-                                    <th className="px-4 py-3 text-right font-semibold">Qty</th>
-                                    <th className="px-4 py-3 text-right font-semibold">Unit Price</th>
-                                    <th className="px-4 py-3 text-right font-semibold">Amount</th>
+                    <div className="mt-5 border-t border-black/30 pt-24" />
+
+                    <div className="mt-6">
+                        <table className="w-full border-collapse text-[14px]">
+                            <thead>
+                                <tr className="border-y border-black/30">
+                                    <th className="py-3 text-left font-bold">Description</th>
+                                    <th className="py-3 text-right font-bold">Rate</th>
+                                    <th className="py-3 text-right font-bold">Qty</th>
+                                    <th className="py-3 text-right font-bold">Amount</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y">
+                            <tbody>
                                 {bill.items.map((item, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 py-3">{item.productName}</td>
-                                        <td className="px-4 py-3 text-right">{item.quantity}</td>
-                                        <td className="px-4 py-3 text-right">{formatCurrency(item.price)}</td>
-                                        <td className="px-4 py-3 text-right font-semibold">{formatCurrency(item.total)}</td>
+                                    <tr key={`${item.productId || item.productName}-${index}`} className="border-b border-black/30">
+                                        <td className="py-3 pr-4 align-top">{item.productName}</td>
+                                        <td className="py-3 text-right align-top">{formatCurrency(item.price)}</td>
+                                        <td className="py-3 text-right align-top">{item.quantity}</td>
+                                        <td className="py-3 text-right align-top">{formatCurrency(item.total)}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
 
-                    {/* Totals */}
-                    <div className="flex justify-end">
-                        <div className="w-full md:w-80">
-                            <div className="space-y-2 divide-y">
-                                <div className="flex justify-between py-2">
-                                    <span>Subtotal:</span>
-                                    <span className="font-semibold">{formatCurrency(bill.subtotal)}</span>
+                    <div className="mt-4 flex justify-end">
+                        <div className="w-full max-w-[240px] text-[14px]">
+                            <div className="flex items-center justify-between py-2">
+                                <span className="font-bold">Subtotal</span>
+                                <span>{formatCurrency(bill.subtotal)}</span>
+                            </div>
+                            <div className="flex items-center justify-between border-b border-black/30 py-2">
+                                <span className="font-bold">Tax ({bill.tax > 0 ? "GST" : "0%"})</span>
+                                <span>{formatCurrency(bill.tax)}</span>
+                            </div>
+                            {bill.discount > 0 ? (
+                                <div className="flex items-center justify-between py-2">
+                                    <span className="font-bold">Discount</span>
+                                    <span>-{formatCurrency(bill.discount)}</span>
                                 </div>
-                                {bill.tax > `` && (
-                                    <div className="flex justify-between py-2">
-                                        <span>Tax:</span>
-                                        <span className="font-semibold">{formatCurrency(bill.tax)}</span>
-                                    </div>
-                                )}
-                                {bill.discount > 0 && (
-                                    <div className="flex justify-between py-2">
-                                        <span>Discount:</span>
-                                        <span className="font-semibold">-{formatCurrency(bill.discount)}</span>
-                                    </div>
-                                )}
-                                <div className="flex justify-between bg-slate-100 py-3 px-2 rounded dark:bg-slate-800">
-                                    <span className="font-semibold">Total Due:</span>
-                                    <span className="font-display text-2xl font-bold text-emerald-700">{formatCurrency(bill.total)}</span>
-                                </div>
+                            ) : null}
+                            <div className="flex items-center justify-between py-3 text-[15px]">
+                                <span className="font-bold">Total</span>
+                                <span className="font-black">{formatCurrency(bill.total)}</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Payment Method and Notes */}
-                    <div className="border-t pt-6 space-y-4">
-                        <div>
-                            <p className="text-sm font-semibold text-[rgb(var(--muted))]">Payment Method</p>
-                            <p className="text-base capitalize">{bill.paymentMethod}</p>
-                        </div>
-                        {bill.notes && (
+                    <div className="mt-32 border-t border-black/30 pt-6">
+                        <div className="grid gap-8 sm:grid-cols-2">
                             <div>
-                                <p className="text-sm font-semibold text-[rgb(var(--muted))]">Notes</p>
-                                <p className="text-base whitespace-pre-wrap">{bill.notes}</p>
+                                <p className="mb-4 text-[15px] font-bold">Payment Information</p>
+                                <div className="space-y-1 text-[14px] leading-7">
+                                    <p>{companyInfo.name}</p>
+                                    <p>Bank: {companyInfo.bank}</p>
+                                    <p>Account No: {companyInfo.account}</p>
+                                    <p className="capitalize">Payment Method: {bill.paymentMethod}</p>
+                                    {bill.notes ? <p>Notes: {bill.notes}</p> : null}
+                                </div>
                             </div>
-                        )}
-                    </div>
 
-                    {/* Footer */}
-                    <div className="border-t pt-6 text-center">
-                        <p className="text-xs text-[rgb(var(--muted))]">Thank you for your business!</p>
-                        <p className="text-xs text-[rgb(var(--muted))] mt-2">
-                            Created on {new Date(bill.createdAt).toLocaleString()}
-                        </p>
+                            <div>
+                                <p className="mb-4 text-[15px] font-bold">{companyInfo.name}</p>
+                                <div className="space-y-1 text-[14px] leading-7">
+                                    <p>{companyInfo.address}</p>
+                                    <p>{companyInfo.phone}</p>
+                                    <p>{companyInfo.email}</p>
+                                    <p className="font-semibold uppercase">{bill.paymentStatus}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <style>{`
+                    @media print {
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            background: #f3ecdc;
+                        }
+
+                        @page {
+                            size: A4;
+                            margin: 0;
+                        }
+                    }
+                `}</style>
             </div>
         </div>
     );

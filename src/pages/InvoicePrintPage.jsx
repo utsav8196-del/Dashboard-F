@@ -1,4 +1,5 @@
 import { Printer } from 'lucide-react';
+import { formatCurrency } from "../utils/format.js";
 
 const InvoicePrint = ({ bill }) => {
     const handlePrint = () => {
@@ -56,7 +57,7 @@ const InvoicePrint = ({ bill }) => {
                             <p className="text-sm">{bill.customerPhone}</p>
                             <p className="text-sm mt-2">
                                 <span className="font-semibold">Invoice Date: </span>
-                                {new Date(bill.createdAt).toLocaleDateString('en-US', {
+                                {new Date(bill.createdAt).toLocaleDateString('en-IN', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric'
@@ -90,8 +91,8 @@ const InvoicePrint = ({ bill }) => {
                             <tr key={idx} className="border-b border-gray-200">
                                 <td className="py-3 px-4 text-gray-800">{item.productName}</td>
                                 <td className="py-3 px-4 text-center text-gray-800">{item.quantity}</td>
-                                <td className="py-3 px-4 text-right text-gray-800">₹{item.price.toFixed(2)}</td>
-                                <td className="py-3 px-4 text-right text-gray-800">₹{item.total.toFixed(2)}</td>
+                                <td className="py-3 px-4 text-right text-gray-800">{formatCurrency(item.price)}</td>
+                                <td className="py-3 px-4 text-right text-gray-800">{formatCurrency(item.total)}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -102,20 +103,20 @@ const InvoicePrint = ({ bill }) => {
                     <div className="w-64">
                         <div className="flex justify-between py-2 border-b border-gray-300">
                             <span className="text-gray-700">Subtotal:</span>
-                            <span className="text-gray-800 font-semibold">₹{bill.subtotal.toFixed(2)}</span>
+                            <span className="text-gray-800 font-semibold">{formatCurrency(bill.subtotal)}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b border-gray-300">
                             <span className="text-gray-700">Tax (GST):</span>
-                            <span className="text-gray-800 font-semibold">₹{bill.tax.toFixed(2)}</span>
+                            <span className="text-gray-800 font-semibold">{formatCurrency(bill.tax)}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b border-gray-300">
                             <span className="text-gray-700">Discount:</span>
-                            <span className="text-gray-800 font-semibold">-₹{bill.discount.toFixed(2)}</span>
+                            <span className="text-gray-800 font-semibold">-{formatCurrency(bill.discount)}</span>
                         </div>
                         <div className="flex justify-between py-3 bg-gray-100 px-4 rounded mt-2">
                             <span className="text-gray-800 font-bold">Total Amount:</span>
                             <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                                ₹{bill.total.toFixed(2)}
+                                {formatCurrency(bill.total)}
                             </span>
                         </div>
                     </div>

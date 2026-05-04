@@ -15,12 +15,15 @@ export default function DashboardBillsPage() {
     const [filter, setFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [actionMessage, setActionMessage] = useState("");
+    const [actionError, setActionError] = useState("");
 
     useDocumentTitle("Manage bills");
 
     const loadBills = useCallback(async (currentPage = 1) => {
         try {
             setLoading(true);
+            setActionError("");
             const query = new URLSearchParams({ page: currentPage, limit: 10 });
             if (filter !== "all") {
                 query.append("paymentStatus", filter);
@@ -31,6 +34,7 @@ export default function DashboardBillsPage() {
             setPage(currentPage);
         } catch (error) {
             console.error("Failed to load bills:", error);
+            setActionError(error.response?.data?.message || "Failed to load bills.");
         } finally {
             setLoading(false);
         }
@@ -42,31 +46,43 @@ export default function DashboardBillsPage() {
 
     async function handleCreateBill(billData) {
         try {
-            await api.post("/bills", billData);
+            setActionError("");
+            const { data } = await api.post("/bills", billData);
             setFormModalOpen(false);
-            loadBills(1);
+            setActionMessage(`Bill ${data.bill.billNumber} created successfully.`);
+            await loadBills(1);
+            return data;
         } catch (error) {
             console.error("Failed to create bill:", error);
+            const message = error.response?.data?.message || "Failed to create bill.";
+            setActionError(message);
+            throw new Error(message);
         }
     }
 
     async function handleDeleteBill(billId) {
         if (confirm("Are you sure you want to delete this bill?")) {
             try {
+                setActionError("");
                 await api.delete(`/bills/${billId}`);
+                setActionMessage("Bill deleted successfully.");
                 loadBills(page);
             } catch (error) {
                 console.error("Failed to delete bill:", error);
+                setActionError(error.response?.data?.message || "Failed to delete bill.");
             }
         }
     }
 
     async function handleUpdatePaymentStatus(billId, newStatus) {
         try {
+            setActionError("");
             await api.patch(`/bills/${billId}/payment-status`, { paymentStatus: newStatus });
+            setActionMessage(`Payment status updated to ${newStatus}.`);
             loadBills(page);
         } catch (error) {
             console.error("Failed to update payment status:", error);
+            setActionError(error.response?.data?.message || "Failed to update payment status.");
         }
     }
 
@@ -103,7 +119,10 @@ export default function DashboardBillsPage() {
                 {["all", "paid", "pending", "cancelled"].map((status) => (
                     <button
                         key={status}
-                        onClick={() => setFilter(status)}
+                        onClick={() => {
+                            setActionMessage("");
+                            setFilter(status);
+                        }}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === status
                             ? "bg-brand text-white"
                             : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
@@ -113,6 +132,18 @@ export default function DashboardBillsPage() {
                     </button>
                 ))}
             </div>
+
+            {actionMessage ? (
+                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-200">
+                    {actionMessage}
+                </div>
+            ) : null}
+
+            {actionError ? (
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200">
+                    {actionError}
+                </div>
+            ) : null}
 
             <div className="panel overflow-hidden">
                 {loading ? (

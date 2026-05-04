@@ -1,10 +1,11 @@
 import clsx from "clsx";
 
 export function formatCurrency(value) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(value || 0);
 }
 
